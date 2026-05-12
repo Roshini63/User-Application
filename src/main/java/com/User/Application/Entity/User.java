@@ -1,41 +1,43 @@
 package com.User.Application.Entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
     private String name;
 
-    @Email
     @Column(unique = true)
     private String email;
 
-    @NotBlank
     private String password;
-
-    @Pattern(regexp = "\\d{10}")
     private String phone;
-
     private String address;
-
     private Integer age;
-
     private String gender;
+    private String role = "USER";
 
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     @PrePersist
     public void prePersist() {
-        this.createdAt = LocalDateTime.now();
+        createdAt = LocalDateTime.now();
     }
 
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }

@@ -1,14 +1,15 @@
 package com.User.Application.Controller;
 
-import com.example.demo.entity.User;
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.service.UserService;
+import com.User.Application.DTO.UserRequest;
+import com.User.Application.DTO.UserResponse;
+import com.User.Application.Entity.User;
+import com.User.Application.DTO.LoginRequest;
+import com.User.Application.Service.UserService;
 
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.*;
-
 import java.util.List;
 
 
@@ -24,14 +25,14 @@ public class UserController {
 
     // REGISTER
     @PostMapping
-    public User createUser(@Valid @RequestBody User user) {
-        return service.create(user);
+    public UserResponse create(@RequestBody UserRequest req) {
+        return service.create(req);
     }
 
     // LOGIN
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest request) {
-        return service.login(request.getEmail(), request.getPassword());
+    public String login(@RequestBody LoginRequest req) {
+        return service.login(req);
     }
 
     // GET ALL
@@ -40,16 +41,16 @@ public class UserController {
         return service.getAll(pageable);
     }
 
-    // SEARCH
-    @GetMapping("/search")
-    public List<User> search(@RequestParam String name) {
-        return service.searchByName(name);
+    // UPDATE
+    @PutMapping("/{id}")
+    public User update(@PathVariable Long id, @RequestBody UserRequest req) {
+        return service.update(id, req);
     }
 
     // DELETE
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id) {
         service.delete(id);
-        return "Deleted successfully";
+        return "Deleted";
     }
 }

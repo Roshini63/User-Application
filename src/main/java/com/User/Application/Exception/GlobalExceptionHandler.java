@@ -6,6 +6,12 @@ import org.springframework.http.HttpStatus;
 
 import java.util.*;
 
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.*;
+
+import java.util.*;
+
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -21,9 +27,15 @@ public class GlobalExceptionHandler {
         return errors;
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleRuntime(RuntimeException ex) {
-        return ex.getMessage();
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<String> handleUser(UserNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> handleRuntime(RuntimeException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
 }
+
